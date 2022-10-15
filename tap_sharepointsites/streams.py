@@ -17,7 +17,7 @@ class ListStream(sharepointsitesStream):
     """Define custom stream."""
     name = "lists"
     path = ""
-    primary_keys = [] #["@odata.etag"]
+    primary_keys = ["'@odata.etag'"]
     replication_key = None
     schema = th.PropertiesList(
         th.Property("@odata.etag", th.StringType),
