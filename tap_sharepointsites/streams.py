@@ -33,6 +33,6 @@ class ListStream(sharepointsitesStream):
         Property("lastModifiedBy", ObjectType()),
         Property("parentReference", ObjectType()),      
         Property("contentType", ObjectType()),
-        Property("fields@odata.context", ObjectType()),
+        Property("fields@odata.context", StringType),
         Property("fields",  ObjectType()),
     ).to_dict()
