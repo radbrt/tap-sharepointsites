@@ -15,12 +15,21 @@ plugins:
     - catalog
     - discover
     config:
-      start_date: '2010-01-01T00:00:00Z'
+      api_url: null
+      lists: []
     settings:
     # TODO: To configure using Meltano, declare settings and their types here:
-    - name: site_url
-    - name: start_date
-      value: '2010-01-01T00:00:00Z'
+    - name: api_url
+      label: Site URL
+      documentation: API URL of the sharepoint site where your lists are located.
+      placeholder: Ex. https://graph.microsoft.com/v1.0/sites/my-tenant.com:/sites/my-site:/
+    - name: client_id
+      label: Managed Identity Client ID
+      documentation: Managed Identity Client ID, when authenticating with a user-assigned managed identity.
+    - name: lists
+      label: Sharepoint Lists
+      documentation: An array of lists to extract, each an object with `name` as a key.
+      placeholder: ["my-list-1", "my-list-2"]
   loaders:
   - name: target-jsonl
     variant: andyh1203

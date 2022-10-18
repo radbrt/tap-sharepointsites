@@ -9,11 +9,6 @@ from tap_sharepointsites.streams import (
     sharepointsitesStream,
     ListStream,
 )
-# TODO: Compile a list of custom stream types here
-#       OR rewrite discover_streams() below with your custom logic.
-STREAM_TYPES = [
-    ListStream,
-]
 
 
 class Tapsharepointsites(Tap):
@@ -43,7 +38,8 @@ class Tapsharepointsites(Tap):
 
     def discover_streams(self) -> List[Stream]:
         """Return a list of discovered streams."""
-        return [stream_class(tap=self) for stream_class in STREAM_TYPES]
+
+        return [ListStream(tap=self, name=list_name, path = f"lists/{ list_name }/items?expand=fields") for list_name in self.config['lists']]
 
 
 if __name__ == "__main__":

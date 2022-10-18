@@ -3,7 +3,7 @@ import re
 import requests
 from pathlib import Path
 from typing import Any, Dict, Optional, Union, List, Iterable
-
+from datetime import datetime
 from memoization import cached
 from urllib.parse import parse_qsl
 from singer_sdk.helpers.jsonpath import extract_jsonpath
@@ -104,4 +104,5 @@ class sharepointsitesStream(RESTStream):
         # LOGGER.info(row)
         # row = {re.sub(r'[^a-zA-Z0-9]', '_', k): v for k, v in row.items()}
         # LOGGER.info(row)
+        row['_loaded_at'] = datetime.utcnow()
         return row

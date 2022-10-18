@@ -8,18 +8,16 @@ from singer_sdk.typing import (
     PropertiesList,
     Property,
     StringType,
-    ObjectType
+    ObjectType,
+    DateTimeType
 )
 from tap_sharepointsites.client import sharepointsitesStream
 
-# TODO: Delete this is if not using json files for schema definition
-SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
-
 
 class ListStream(sharepointsitesStream):
+
     """Define custom stream."""
-    name = "lists"
-    path = ""
+
     primary_keys = ["id"]
     replication_key = None
     schema = PropertiesList(
@@ -35,4 +33,5 @@ class ListStream(sharepointsitesStream):
         Property("contentType", ObjectType()),
         Property("fields@odata.context", StringType),
         Property("fields",  ObjectType()),
+        Property("_loaded_at", DateTimeType),
     ).to_dict()
