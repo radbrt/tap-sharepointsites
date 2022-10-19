@@ -18,22 +18,24 @@ class Tapsharepointsites(Tap):
     # TODO: Update this section with the actual config values you expect:
     config_jsonschema = th.PropertiesList(
         th.Property(
-            "auth_token",
-            th.StringType,
-            required=False,
-            description="The token to authenticate against the API service"
-        ),
-        th.Property(
-            "start_date",
-            th.DateTimeType,
-            description="The earliest record date to sync"
-        ),
-        th.Property(
             "api_url",
             th.StringType,
-            default="https://api.mysample.com",
+            required=True,
             description="The url for the API service"
         ),
+        th.Property(
+            "lists",
+            th.ArrayType,
+            required=True,
+            description="The name of the list to sync"
+        ),
+        th.Property(
+            "client_id",
+            th.DateTimeType,
+            required=False,
+            description="Managed Identity Client ID"
+        ),
+
     ).to_dict()
 
     def discover_streams(self) -> List[Stream]:
