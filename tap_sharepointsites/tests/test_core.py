@@ -12,7 +12,6 @@ from .configuration.sample_catalog import sample_catalog
 # from typing import Dict
 
 
-
 SAMPLE_CONFIG = {
     "api_url": "https://graph.microsoft.com/v1.0/sites/example.sharepoint.com:/sites/demo:/",  # noqa
     "lists": ["list1", "list2"],
