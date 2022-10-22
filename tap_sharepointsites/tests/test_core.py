@@ -3,13 +3,15 @@
 import json
 from unittest import mock
 
+from tap_sharepointsites.streams import ListStream
+from tap_sharepointsites.tap import Tapsharepointsites
+
+from .configuration.responses import graph_response_list
+from .configuration.sample_catalog import sample_catalog
+
 # from typing import Dict
 
-from tap_sharepointsites.tap import Tapsharepointsites
-from tap_sharepointsites.streams import ListStream
 
-from .configuration.sample_catalog import sample_catalog
-from .configuration.responses import graph_response_list
 
 SAMPLE_CONFIG = {
     "api_url": "https://graph.microsoft.com/v1.0/sites/example.sharepoint.com:/sites/demo:/",  # noqa
