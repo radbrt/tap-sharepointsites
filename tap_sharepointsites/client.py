@@ -1,16 +1,14 @@
 """REST client handling, including sharepointsitesStream base class."""
-import re
 import requests
 from pathlib import Path
-from typing import Any, Dict, Optional, Union, List, Iterable
+from typing import Any, Dict, Optional, Iterable
 from datetime import datetime
-from memoization import cached
 from urllib.parse import parse_qsl
 from singer_sdk.helpers.jsonpath import extract_jsonpath
 from singer_sdk.streams import RESTStream
 from singer_sdk.authenticators import BearerTokenAuthenticator
 from azure.identity import DefaultAzureCredential, ManagedIdentityCredential
-import re
+
 import logging
 from singer_sdk.pagination import BaseHATEOASPaginator
 
@@ -19,29 +17,28 @@ LOGGER = logging.getLogger("Some logger")
 
 
 class GraphHATEOASPaginator(BaseHATEOASPaginator):
+    """Basic paginator"""
+
     def get_next_url(self, response):
-        return response.json().get('@odata.nextLink')
+        """Returning the URL for next page"""
+
+        return response.json().get("@odata.nextLink")
 
 
 class sharepointsitesStream(RESTStream):
     """sharepointsites stream class."""
 
-    # TODO: Set the API's base URL here:
-
     # OR use a dynamic url_base:
     @property
     def url_base(self) -> str:
         """Return the API URL root, configurable via tap settings."""
-        
         return self.config["api_url"]
 
     records_jsonpath = "$.value[*]"  # Or override `parse_response`.
-    #next_page_token_jsonpath = "$.'@odata.nextLink'"  # Or override `get_next_page_token`.
 
     @property
     def authenticator(self) -> BearerTokenAuthenticator:
         """Return a new authenticator object."""
-
         if self.config.get("client_id"):
             creds = ManagedIdentityCredential(client_id=self.config["client_id"])
         else:
@@ -49,11 +46,7 @@ class sharepointsitesStream(RESTStream):
 
         token = creds.get_token("https://graph.microsoft.com/.default")
 
-        return BearerTokenAuthenticator.create_for_stream(
-            self,
-            token=token.token
-        )
-
+        return BearerTokenAuthenticator.create_for_stream(self, token=token.token)
 
     @property
     def http_headers(self) -> dict:
@@ -66,16 +59,16 @@ class sharepointsitesStream(RESTStream):
         return headers
 
     def get_new_paginator(self):
+        """Return paginator class"""
         return GraphHATEOASPaginator()
-
 
     def get_url_params(
         self, context: Optional[dict], next_page_token: Optional[Any]
-        ) -> Dict[str, Any]:
+    ) -> Dict[str, Any]:
+        """Return next page link or None"""
         if next_page_token:
             return dict(parse_qsl(next_page_token.query))
         return {}
-
 
     def prepare_request_payload(
         self, context: Optional[dict], next_page_token: Optional[Any]
@@ -94,15 +87,6 @@ class sharepointsitesStream(RESTStream):
 
     def post_process(self, row: dict, context: Optional[dict]) -> dict:
         """As needed, append or transform raw data to match expected structure."""
-        # TODO: Delete this method if not needed.
-        # regex replace strange key names
 
-        # def subsub(keyname):
-        #     r1 = re.sub(r'[^a-zA-Z0-9]', '_', keyname)
-        #     r2 = re.sub(r'$[a-zA-Z]+', '_', r1)
-        #     return r2
-        # LOGGER.info(row)
-        # row = {re.sub(r'[^a-zA-Z0-9]', '_', k): v for k, v in row.items()}
-        # LOGGER.info(row)
-        row['_loaded_at'] = datetime.utcnow()
+        row["_loaded_at"] = datetime.utcnow()
         return row
