@@ -1,3 +1,5 @@
+"""Sample catalog for tests."""
+
 sample_catalog = """
 {
     "streams": [

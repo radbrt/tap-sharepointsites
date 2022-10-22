@@ -1,18 +1,17 @@
 """Stream type classes for tap-sharepointsites."""
 
-
 from singer_sdk.typing import (
+    DateTimeType,
+    ObjectType,
     PropertiesList,
     Property,
     StringType,
-    ObjectType,
-    DateTimeType,
 )
+
 from tap_sharepointsites.client import sharepointsitesStream
 
 
 class ListStream(sharepointsitesStream):
-
     """Define custom stream."""
 
     primary_keys = ["id"]

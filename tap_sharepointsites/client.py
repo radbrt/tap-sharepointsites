@@ -1,27 +1,27 @@
 """REST client handling, including sharepointsitesStream base class."""
-import requests
-from pathlib import Path
-from typing import Any, Dict, Optional, Iterable
-from datetime import datetime
-from urllib.parse import parse_qsl
-from singer_sdk.helpers.jsonpath import extract_jsonpath
-from singer_sdk.streams import RESTStream
-from singer_sdk.authenticators import BearerTokenAuthenticator
-from azure.identity import DefaultAzureCredential, ManagedIdentityCredential
 
 import logging
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, Iterable, Optional
+from urllib.parse import parse_qsl
+
+import requests
+from azure.identity import DefaultAzureCredential, ManagedIdentityCredential
+from singer_sdk.authenticators import BearerTokenAuthenticator
+from singer_sdk.helpers.jsonpath import extract_jsonpath
 from singer_sdk.pagination import BaseHATEOASPaginator
+from singer_sdk.streams import RESTStream
 
 SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
 LOGGER = logging.getLogger("Some logger")
 
 
 class GraphHATEOASPaginator(BaseHATEOASPaginator):
-    """Basic paginator"""
+    """Basic paginator."""
 
     def get_next_url(self, response):
-        """Returning the URL for next page"""
-
+        """Return the URL for next page."""
         return response.json().get("@odata.nextLink")
 
 
@@ -39,12 +39,13 @@ class sharepointsitesStream(RESTStream):
     @property
     def authenticator(self) -> BearerTokenAuthenticator:
         """Return a new authenticator object."""
+        ad_scope = "https://graph.microsoft.com/.default"
         if self.config.get("client_id"):
             creds = ManagedIdentityCredential(client_id=self.config["client_id"])
+            token = creds.get_token(ad_scope)
         else:
             creds = DefaultAzureCredential()
-
-        token = creds.get_token("https://graph.microsoft.com/.default")
+            token = creds.get_token(ad_scope)
 
         return BearerTokenAuthenticator.create_for_stream(self, token=token.token)
 
@@ -59,13 +60,13 @@ class sharepointsitesStream(RESTStream):
         return headers
 
     def get_new_paginator(self):
-        """Return paginator class"""
+        """Return paginator class."""
         return GraphHATEOASPaginator()
 
     def get_url_params(
         self, context: Optional[dict], next_page_token: Optional[Any]
     ) -> Dict[str, Any]:
-        """Return next page link or None"""
+        """Return next page link or None."""
         if next_page_token:
             return dict(parse_qsl(next_page_token.query))
         return {}
@@ -87,6 +88,5 @@ class sharepointsitesStream(RESTStream):
 
     def post_process(self, row: dict, context: Optional[dict]) -> dict:
         """As needed, append or transform raw data to match expected structure."""
-
         row["_loaded_at"] = datetime.utcnow()
         return row

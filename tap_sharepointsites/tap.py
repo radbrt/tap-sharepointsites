@@ -2,13 +2,11 @@
 
 from typing import List
 
-from singer_sdk import Tap, Stream
+from singer_sdk import Stream, Tap
 from singer_sdk import typing as th  # JSON schema typing helpers
 
 # TODO: Import your custom stream types here:
-from tap_sharepointsites.streams import (
-    ListStream,
-)
+from tap_sharepointsites.streams import ListStream
 
 
 class Tapsharepointsites(Tap):
@@ -40,7 +38,6 @@ class Tapsharepointsites(Tap):
 
     def discover_streams(self) -> List[Stream]:
         """Return a list of discovered streams."""
-
         return [
             ListStream(
                 tap=self,
