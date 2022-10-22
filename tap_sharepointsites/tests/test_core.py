@@ -6,8 +6,8 @@ from unittest import mock
 from tap_sharepointsites.streams import ListStream
 from tap_sharepointsites.tap import Tapsharepointsites
 
-from .configuration.responses import graph_response_list
-from .configuration.sample_catalog import sample_catalog
+from .configuration.test_catalog import sample_catalog
+from .configuration.test_responses import graph_response_list
 
 # from typing import Dict
 
