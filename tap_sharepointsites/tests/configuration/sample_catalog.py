@@ -1,3 +1,5 @@
+# flake8: noqa
+
 """Sample catalog for tests."""
 
 sample_catalog = """
