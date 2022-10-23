@@ -1,8 +1,10 @@
 # tap-sharepointsites
 
-`tap-sharepointsites` is a Singer tap for sharepointsites.
+`tap-sharepointsites` is a Singer tap for Microsoft Graph Sharepoint lists.
 
 Built with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
+
+[![Test tap-sharepointsites](https://github.com/radbrt/tap-sharepointsites/actions/workflows/ci_workflow.yml/badge.svg)](https://github.com/radbrt/tap-sharepointsites/actions/workflows/ci_workflow.yml)
 
 <!--
 
@@ -52,6 +54,7 @@ This Singer tap will automatically import any environment variables within the w
 environment variable is set either in the terminal context or in the `.env` file.
 
 ### Source Authentication and Authorization
+
 
 <!--
 Developer TODO: If your tap requires special access on the source system, or any special authentication requirements, provide those here.
